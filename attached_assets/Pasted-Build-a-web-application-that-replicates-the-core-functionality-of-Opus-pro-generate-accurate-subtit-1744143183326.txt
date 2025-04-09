@@ -1,0 +1,74 @@
+Build a web application that replicates the core functionality of Opus.pro: generate accurate subtitles from videos through automatic speech recognition. The application should allow video upload, extract audio, transcribe it into text, convert the transcription into timed subtitles, and preview the subtitles over the video.
+
+Features (Functionality Only):
+Video Upload
+
+Accept user-uploaded video files (MP4, MOV, WebM)
+
+Validate file size and format
+
+Audio Extraction
+
+Extract audio from the uploaded video using FFmpeg
+
+Save audio in a standard format (e.g., WAV or MP3) for transcription
+
+Speech-to-Text Transcription
+
+Use OpenAI Whisper (preferred) or Google Speech-to-Text to convert audio into text
+
+Include timestamps (start/end) for each sentence or phrase to generate subtitles
+
+Output format: SRT or WebVTT
+
+Subtitle Synchronization
+
+Convert the transcription into time-aligned subtitle format (SRT or VTT)
+
+Ensure punctuation, casing, and readable segmentation
+
+Video Preview with Subtitles
+
+Display the uploaded video in a video player with subtitle overlay
+
+Allow user to play/pause/seek while watching subtitles in real-time
+
+Optionally allow subtitle file download (SRT)
+
+Stack Recommendation:
+Frontend:
+
+Framework: Next.js with TypeScript (or plain React with Vite)
+
+Styling: Tailwind CSS
+
+Components: Shadcn/ui or Radix UI
+
+Video Player: HTML5 <video> element with <track> for subtitles
+
+Backend:
+
+Language: Node.js with TypeScript
+
+Framework: Fastify (preferred for speed) or Express
+
+Media Processing: fluent-ffmpeg for audio extraction
+
+Transcription: Use OpenAI Whisper via openai/whisper CLI or whisper.cpp, or integrate Google Cloud Speech-to-Text
+
+Subtitle Generator: Create .srt or .vtt parser/generator based on timestamped segments
+
+Notes:
+Focus on transcription accuracy and subtitle timing
+
+Keep the code modular and organized: separate video handling, audio extraction, transcription logic, and subtitle generation
+
+Do not include any deployment, authentication, or production setup for now
+
+All operations can be done locally for testing purposes
+
+Optional (Stretch Goals):
+Allow editing the subtitle text or timing manually
+
+Translate subtitles to other languages (e.g., using DeepL or Google Translate API)
+

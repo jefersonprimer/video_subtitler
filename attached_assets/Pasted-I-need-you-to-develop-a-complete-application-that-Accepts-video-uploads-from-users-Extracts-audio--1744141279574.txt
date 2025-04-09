@@ -1,0 +1,54 @@
+I need you to develop a complete application that:
+
+Accepts video uploads from users
+Extracts audio from these videos
+Accurately converts this audio to text using the OpenAI Whisper API or similar technology
+Creates synchronized captions for the original video
+Allows users to download the video with embedded captions
+
+Specific Technical Requirements:
+
+Video Input: Accept common formats (MP4, AVI, MOV, etc.) and allow uploads or URL specification
+Audio Extraction: Use FFmpeg to extract audio in suitable format
+Transcription:
+
+Implement OpenAI's Whisper API for transcription (or open-source alternative like Whisper.cpp)
+Automatically detect language or allow manual selection
+Maintain accurate timestamps for synchronization
+
+
+Caption Generation: Create SRT or VTT files with correct timestamps
+Video Embedding: Render captions on the video while maintaining original quality
+Interface: Develop intuitive frontend showing real-time progress
+Performance: Optimize for processing speed and accuracy
+
+Desired Advanced Features:
+
+Automatic translation of captions to other languages
+Manual editing of transcribed text before final rendering
+Customization of caption style (font, size, color, position)
+Detection and differentiation of multiple speakers
+Noise filtering to improve accuracy in low-quality audio
+Support for videos with complex cuts or transitions
+API for integration with other tools
+
+Technical Implementation:
+Please provide:
+
+Detailed system architecture
+Data flow between components
+Technology and library choices with justifications
+Infrastructure requirements
+Pseudocode or actual code for critical components
+Step-by-step implementation instructions
+Scalability and performance considerations
+
+Include solutions for common challenges such as:
+
+Processing long videos
+Handling accents or low-quality audio
+Precise synchronization between audio and text
+Computational resource management
+
+Expected Result:
+A complete, robust, and highly accurate solution that works in various scenarios and produces professional-quality captions with minimal human intervention.

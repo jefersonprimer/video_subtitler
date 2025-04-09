@@ -1,0 +1,211 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0"><i class="fas fa-edit me-2"></i>Edit Subtitles</h4>
+                <span class="badge bg-dark">{{ video_filename }}</span>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Review and edit the automatically generated subtitles below. Make changes as needed before embedding them in your video.</p>
+                
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="subtitlesTable">
+                        <thead class="table-dark">
+                            <tr>
+                                <th width="5%">#</th>
+                                <th width="20%">Start Time</th>
+                                <th width="20%">End Time</th>
+                                <th width="55%">Text</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for subtitle in subtitles %}
+                            <tr data-index="{{ subtitle.index }}">
+                                <td>{{ subtitle.index }}</td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm start-time" 
+                                           value="{{ subtitle.start }}" pattern="\d{2}:\d{2}:\d{2},\d{3}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm end-time" 
+                                           value="{{ subtitle.end }}" pattern="\d{2}:\d{2}:\d{2},\d{3}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm subtitle-text" 
+                                           value="{{ subtitle.text }}">
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="alert alert-info small">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Time format: HH:MM:SS,mmm (e.g., 00:01:23,456)
+                </div>
+                
+                <div class="text-center mt-3">
+                    <button id="saveSubtitles" class="btn btn-success me-2">
+                        <i class="fas fa-save me-2"></i> Save Changes
+                    </button>
+                    
+                    <div class="dropdown d-inline-block">
+                      <button class="btn btn-info dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-language me-2"></i> Language Tools
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <li><a class="dropdown-item" href="#" id="detectLanguageBtn">Detect Language</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><h6 class="dropdown-header">Translate To:</h6></li>
+                        <li><a class="dropdown-item translate-btn" href="#" data-lang="pt-br"><strong>Portuguese (Brazil) - Recommended</strong></a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item translate-btn" href="#" data-lang="en">English</a></li>
+                        <li><a class="dropdown-item translate-btn" href="#" data-lang="es">Spanish</a></li>
+                        <li><a class="dropdown-item translate-btn" href="#" data-lang="fr">French</a></li>
+                        <li><a class="dropdown-item translate-btn" href="#" data-lang="de">German</a></li>
+                        <li><a class="dropdown-item translate-btn" href="#" data-lang="it">Italian</a></li>
+                        <li><a class="dropdown-item translate-btn" href="#" data-lang="ja">Japanese</a></li>
+                        <li><a class="dropdown-item translate-btn" href="#" data-lang="zh-cn">Chinese (Simplified)</a></li>
+                        <li><a class="dropdown-item translate-btn" href="#" data-lang="ar">Arabic</a></li>
+                        <li><a class="dropdown-item translate-btn" href="#" data-lang="ru">Russian</a></li>
+                      </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0"><i class="fas fa-sliders-h me-2"></i>Subtitle Options</h5>
+            </div>
+            <div class="card-body">
+                <!-- Subtitle Preview Area -->
+                <div class="mb-4">
+                    <h6 class="mb-3"><i class="fas fa-eye me-2"></i>Subtitle Preview</h6>
+                    <div class="subtitle-preview-container position-relative bg-dark" style="height: 180px; overflow: hidden;">
+                        <div id="subtitlePreview" class="subtitle-preview draggable position-absolute p-2 text-center" 
+                             style="min-width: 80%; left: 10%; bottom: 10%; cursor: move; user-select: none;">
+                            <span id="previewText">Sample subtitle text</span>
+                        </div>
+                        <div class="preview-instructions small text-muted text-center mt-1">
+                            <i class="fas fa-mouse-pointer me-1"></i> Drag to position subtitles
+                        </div>
+                    </div>
+                </div>
+                
+                <form action="{{ url_for('generate_video') }}" method="post" id="subtitleOptionsForm">
+                    <!-- Custom position inputs (will be updated when dragging) -->
+                    <input type="hidden" id="customPosX" name="custom_pos_x" value="50">
+                    <input type="hidden" id="customPosY" name="custom_pos_y" value="90">
+                    
+                    <div class="mb-3">
+                        <label for="fontSizeRange" class="form-label">Font Size: <span id="fontSizeValue">24</span>px</label>
+                        <input type="range" class="form-range" id="fontSizeRange" name="font_size" 
+                               min="16" max="48" step="2" value="24">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="fontColor" class="form-label">Font Color:</label>
+                        <div class="input-group">
+                            <span class="input-group-text color-preview" id="fontColorPreview">&nbsp;</span>
+                            <select class="form-select" id="fontColor" name="font_color">
+                                <option value="white" selected>White</option>
+                                <option value="yellow">Yellow</option>
+                                <option value="lime">Bright Green</option>
+                                <option value="cyan">Cyan</option>
+                                <option value="magenta">Magenta</option>
+                                <option value="red">Red</option>
+                                <option value="orange">Orange</option>
+                                <option value="aliceblue">Light Blue</option>
+                                <option value="pink">Pink</option>
+                            </select>
+                            <input type="color" class="form-control form-control-color" id="fontColorPicker" value="#ffffff">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="bgColor" class="form-label">Background Color:</label>
+                        <div class="input-group">
+                            <span class="input-group-text color-preview" id="bgColorPreview">&nbsp;</span>
+                            <select class="form-select" id="bgColor" name="bg_color">
+                                <option value="black" selected>Black</option>
+                                <option value="transparent">Transparent</option>
+                                <option value="navy">Dark Blue</option>
+                                <option value="darkred">Dark Red</option>
+                                <option value="darkgreen">Dark Green</option>
+                                <option value="purple">Purple</option>
+                                <option value="gray">Gray</option>
+                                <option value="brown">Brown</option>
+                            </select>
+                            <input type="color" class="form-control form-control-color" id="bgColorPicker" value="#000000">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="subtitleWidth" class="form-label">Subtitle Width: <span id="widthValue">80</span>%</label>
+                        <input type="range" class="form-range" id="subtitleWidth" name="subtitle_width" 
+                               min="40" max="100" step="5" value="80">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="position" class="form-label">Position Preset:</label>
+                        <select class="form-select" id="position" name="position">
+                            <option value="custom" selected>Custom (Drag to Position)</option>
+                            <option value="bottom">Bottom</option>
+                            <option value="top">Top</option>
+                            <option value="center">Center</option>
+                        </select>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary" id="generateBtn">
+                            <i class="fas fa-magic me-2"></i> Generate Video with Subtitles
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="mt-4">
+                    <div class="card bg-dark">
+                        <div class="card-body">
+                            <h6 class="card-title">Video Information</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li><i class="fas fa-file-video me-2"></i> Format: {{ video_info.format }}</li>
+                                <li><i class="fas fa-clock me-2"></i> Duration: {{ "%0.2f"|format(video_info.duration|float) }} seconds</li>
+                                <li><i class="fas fa-ruler-combined me-2"></i> Resolution: {{ video_info.width }}x{{ video_info.height }}</li>
+                                <li><i class="fas fa-film me-2"></i> Codec: {{ video_info.codec }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="processingModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center py-4">
+                <div class="spinner-border text-primary mb-3" role="status"></div>
+                <h5>Processing Your Video</h5>
+                <p class="text-muted">This may take a few minutes depending on the video length.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        initSubtitleEditor();
+    });
+</script>
+{% endblock %}

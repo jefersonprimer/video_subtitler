@@ -1,0 +1,168 @@
+/* Custom styles for Video Subtitler */
+
+/* File upload area styling */
+.file-upload-wrapper {
+    position: relative;
+    margin-bottom: 1rem;
+    border: 2px dashed var(--bs-secondary);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.file-upload-wrapper:hover {
+    border-color: var(--bs-primary);
+}
+
+.file-upload-wrapper.highlight {
+    border-color: var(--bs-primary);
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+.file-upload-message {
+    color: var(--bs-secondary);
+}
+
+/* Hide the actual file input */
+#videoInput {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+/* Subtitle editor styles */
+#subtitlesTable th, #subtitlesTable td {
+    vertical-align: middle;
+}
+
+/* Styling for smaller screens */
+@media (max-width: 576px) {
+    #subtitlesTable {
+        font-size: 0.85rem;
+    }
+    
+    #subtitlesTable input {
+        padding: 0.2rem 0.4rem;
+    }
+}
+
+/* Card hover effects */
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* How it works section */
+.row .col-md-4 .border {
+    transition: all 0.3s ease;
+}
+
+.row .col-md-4 .border:hover {
+    transform: scale(1.05);
+    border-color: var(--bs-primary) !important;
+}
+
+/* Custom button styles */
+.btn-primary {
+    box-shadow: 0 0.125rem 0.25rem rgba(13, 110, 253, 0.4);
+}
+
+.btn-success {
+    box-shadow: 0 0.125rem 0.25rem rgba(25, 135, 84, 0.4);
+}
+
+/* Improved focus styles */
+.form-control:focus,
+.form-select:focus,
+.btn:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Video information card styling */
+.card.bg-dark {
+    background-color: var(--bs-dark) !important;
+}
+
+.card.bg-dark .list-unstyled li {
+    margin-bottom: 0.5rem;
+}
+
+.card.bg-dark .list-unstyled li:last-child {
+    margin-bottom: 0;
+}
+
+/* Processing modal animation */
+.spinner-border {
+    height: 3rem;
+    width: 3rem;
+}
+
+/* Subtitle preview styles */
+.subtitle-preview-container {
+    border-radius: 0.375rem;
+    position: relative;
+}
+
+.subtitle-preview {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    word-wrap: break-word;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.draggable {
+    cursor: move;
+    user-select: none;
+    touch-action: none;
+}
+
+/* Color preview boxes */
+.color-preview {
+    width: 40px;
+    height: 38px;
+}
+
+#fontColorPreview {
+    background-color: white;
+}
+
+#bgColorPreview {
+    background-color: black;
+}
+
+/* Custom color picker styling */
+input[type="color"] {
+    width: 40px;
+    padding: 0;
+    margin: 0;
+}
+
+/* Touch device specific styles */
+@media (pointer: coarse) {
+    .draggable:before {
+        content: "≡";
+        position: absolute;
+        top: -20px;
+        left: calc(50% - 10px);
+        width: 20px;
+        height: 20px;
+        background-color: rgba(255, 255, 255, 0.5);
+        color: black;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 20px;
+    }
+}

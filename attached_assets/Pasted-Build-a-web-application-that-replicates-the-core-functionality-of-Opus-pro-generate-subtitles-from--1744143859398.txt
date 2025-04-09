@@ -1,0 +1,84 @@
+Build a web application that replicates the core functionality of Opus.pro: generate subtitles from videos through automatic speech recognition, preview them, and burn them into the video (hardcoded). The app should be entirely local and must not require an API key to run.
+
+🎯 Core Requirements:
+Video Upload
+
+Accept video files from users (.mp4, .mov, .webm)
+
+Validate file type and size
+
+Audio Extraction
+
+Extract audio from the uploaded video using ffmpeg
+
+Save audio as .wav or .mp3 for processing
+
+Transcription (Whisper)
+
+Use the open-source Whisper model from https://github.com/openai/whisper
+
+Install via pip install -U openai-whisper
+
+Do not use OpenAI's transcription API — no API key should be required
+
+Perform transcription locally using tiny, base, small, or medium models
+
+Language: auto-detect or allow user to specify
+
+Output: .srt and/or .vtt with timestamps
+
+Subtitle Generation
+
+Format the transcription into proper .srt or .vtt
+
+Split long sentences if necessary for readability
+
+Ensure timestamps are correctly aligned
+
+Hardcode Subtitles into Video
+
+Automatically burn subtitles into the original video using ffmpeg
+
+Do not offer timing options — use the timestamps from the .srt file as-is
+
+Output: .mp4 video with hardcoded subtitles (output_with_subs.mp4)
+
+Example command:
+
+bash
+Copy
+Edit
+ffmpeg -i input.mp4 -vf "subtitles=subtitles.srt:force_style='FontName=Arial,FontSize=24'" -c:a copy output_with_subs.mp4
+Preview Feature
+
+Include a view to preview the video with subtitles (HTML5 <video> + <track>)
+
+Optional step before final render
+
+🧱 Recommended Stack:
+Frontend:
+
+Next.js + TypeScript
+
+Tailwind CSS
+
+HTML5 Video player
+
+Backend:
+
+Node.js (Express or Fastify) or Python (Flask/FastAPI)
+
+ffmpeg for media processing
+
+Local whisper CLI via Python subprocess
+
+multer (Node) or upload handlers to receive video files
+
+❗️Additional Notes:
+All processing (transcription + ffmpeg) should run locally
+
+Must work entirely offline (except for downloading the Whisper model initially)
+
+No API key, no paid services
+
+Ensure code is modular: upload/, transcribe/, subtitles/, render/
